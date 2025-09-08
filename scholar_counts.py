@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Collect Google Scholar approximate result counts for "OpenFOAM"
-for each year 2005–<current_year>. All years are re-fetched every run.
+Collect Google Scholar approximate annual number of entries for a SEARCH_WORD
+such as "OpenFOAM" for the time periode 2005-present.
 """
 
 import re
@@ -18,7 +18,20 @@ from urllib3.util.retry import Retry
 
 import matplotlib.pyplot as plt
 
+plt.rcParams.update({'font.size': 16})
+
 SEARCH_URL = "https://scholar.google.com/scholar"
+
+# Search term
+SEARCH_WORD = "OpenFOAM"
+
+# Year interval
+start_year = 2005
+end_year = datetime.now().year  # current year
+
+# Output files
+out_csv = f"scholar_counts.csv"
+out_png = "scholar_counts.png"
 
 HEADERS = {
     "User-Agent": (
@@ -33,7 +46,7 @@ HEADERS = {
 }
 
 PARAMS_BASE = {
-    "as_q": "OpenFOAM",
+    "as_q": SEARCH_WORD,
     "hl": "en",
     "as_sdt": "0,5",
 }
@@ -104,18 +117,13 @@ def fetch_year_count(session: requests.Session, year: int, max_attempts: int = 3
 
 
 def main():
-    start_year = 2005
-    end_year = datetime.now().year  # current year
-
-    out_csv = f"openfoam_scholar_counts_{start_year}_{end_year}.csv"
-    out_png = "openfoam_trend.png"
 
     years = list(range(start_year, end_year + 1))
 
     results: List[Tuple[int, int]] = []
     session = requests_session_with_retries()
 
-    print(f"Collecting Google Scholar counts for 'OpenFOAM' ({start_year}–{end_year})...")
+    print(f"Collecting Google Scholar counts for '{SEARCH_WORD}' ({start_year}–{end_year})...")
     for i, y in enumerate(years, 1):
         if i > 1:
             time.sleep(random.uniform(2.0, 4.0))
@@ -124,6 +132,8 @@ def main():
         if err:
             print(f"{year}: ERROR - {err}")
             count = 0
+            print("ABORTING - PNG AND CSV NOT UPDATED!")
+            return
         else:
             print(f"{year}: {count} results")
         results.append((year, count))
@@ -142,7 +152,7 @@ def main():
     # Bar plot
     fig, ax = plt.subplots(figsize=(12, 6))
     ax.bar(years_plot, counts_plot, color="skyblue", edgecolor="black")
-    ax.set_title(f'Google Scholar "OpenFOAM" approximate results by year ({start_year}–{end_year})')
+    ax.set_title(f'Google Scholar "{SEARCH_WORD}" approximate results by year ({start_year}–{end_year})')
     ax.set_xlabel("Year")
     ax.set_ylabel("Approximate results")
     ax.set_xticks(years_plot)

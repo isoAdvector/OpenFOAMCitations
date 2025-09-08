@@ -2,7 +2,7 @@ name: Update Scholar Counts
 
 on:
   schedule:
-    - cron: "0 6 * * 0"  # run weekly on Sundays at 06:00 UTC
+    - cron: "0 6 1 * *"  # Run at 06:00 UTC on the 1st of every month    
   workflow_dispatch:      # allow manual trigger
 
 jobs:
@@ -28,6 +28,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add *.csv openfoam_trend.png
+          git add scholar_counts.csv scholar_counts.png
           git commit -m "Weekly update of scholar counts [ci skip]" || echo "No changes"
           git push

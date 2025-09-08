@@ -11,9 +11,10 @@ The script stores results in a CSV file and generates a bar chart.
 
 ## Data
 
-- Counts are approximate, as reported by Google Scholar.  
+- Counts are approximate, as reported by Google Scholar.
+- Especially data for the last couple of years can be questionable since GS might not have found all articles yet.  
 - Data is stored in the CSV file (one row per year).  
-- Updated automatically every Sunday.  
+- Updated automatically once per month.  
 - Generated with help from ChatGPT.
 
 ## Known issues

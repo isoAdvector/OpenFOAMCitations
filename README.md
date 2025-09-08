@@ -7,7 +7,7 @@ The script stores results in a CSV file and generates a bar chart.
 
 ## Latest trend
 
-![OpenFOAM Scholar Results](openfoam_trend.png)
+![OpenFOAM Scholar Results](scholar_counts.png)
 
 ## Data
 
